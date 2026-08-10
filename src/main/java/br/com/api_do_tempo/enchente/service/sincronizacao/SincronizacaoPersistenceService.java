@@ -1,7 +1,9 @@
-package br.com.api_do_tempo.enchente.sincronizacao;
+package br.com.api_do_tempo.enchente.service.sincronizacao;
 
-import br.com.api_do_tempo.enchente.estacao.EstacaoMeteorologica;
-import br.com.api_do_tempo.enchente.estacao.EstacaoMeteorologicaRepository;
+import br.com.api_do_tempo.enchente.dto.sincronizacao.GraphQlResponse;
+import br.com.api_do_tempo.enchente.dto.sincronizacao.SincronizacaoResultado;
+import br.com.api_do_tempo.enchente.entity.estacao.EstacaoMeteorologica;
+import br.com.api_do_tempo.enchente.repository.estacao.EstacaoMeteorologicaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +23,7 @@ public class SincronizacaoPersistenceService {
     }
 
     @Transactional
-    public SincronizacaoService.SincronizacaoResultado salvar(
+    public SincronizacaoResultado salvar(
             List<GraphQlResponse.EstacaoDto> estacoes, String dadosBrutos) {
         OffsetDateTime agora = OffsetDateTime.now(ZoneOffset.UTC);
         Map<String, EstacaoMeteorologica> existentes = new HashMap<>();
@@ -36,7 +38,7 @@ public class SincronizacaoPersistenceService {
                 .map(estacao -> atualizarEntidade(estacao, existentes, dadosBrutos, agora))
                 .toList();
         repository.saveAll(paraSalvar);
-        return new SincronizacaoService.SincronizacaoResultado(paraSalvar.size(), agora);
+        return new SincronizacaoResultado(paraSalvar.size(), agora);
     }
 
     private EstacaoMeteorologica atualizarEntidade(GraphQlResponse.EstacaoDto dto,

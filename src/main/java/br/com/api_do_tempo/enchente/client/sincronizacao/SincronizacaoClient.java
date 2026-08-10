@@ -1,4 +1,7 @@
-package br.com.api_do_tempo.enchente.sincronizacao;
+package br.com.api_do_tempo.enchente.client.sincronizacao;
+
+import br.com.api_do_tempo.enchente.dto.sincronizacao.GraphQlRequest;
+import br.com.api_do_tempo.enchente.dto.sincronizacao.GraphQlResponse;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;

@@ -1,4 +1,4 @@
-package br.com.api_do_tempo.enchente.estacao;
+package br.com.api_do_tempo.enchente.entity.estacao;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

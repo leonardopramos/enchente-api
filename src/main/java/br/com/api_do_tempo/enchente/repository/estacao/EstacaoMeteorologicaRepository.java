@@ -1,4 +1,6 @@
-package br.com.api_do_tempo.enchente.estacao;
+package br.com.api_do_tempo.enchente.repository.estacao;
+
+import br.com.api_do_tempo.enchente.entity.estacao.EstacaoMeteorologica;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

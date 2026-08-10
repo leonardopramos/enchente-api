@@ -1,4 +1,7 @@
-package br.com.api_do_tempo.enchente.sincronizacao;
+package br.com.api_do_tempo.enchente.controller.sincronizacao;
+
+import br.com.api_do_tempo.enchente.dto.sincronizacao.SincronizacaoResultado;
+import br.com.api_do_tempo.enchente.service.sincronizacao.SincronizacaoService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +19,7 @@ public class SincronizacaoController {
     }
 
     @PostMapping
-    public ResponseEntity<SincronizacaoService.SincronizacaoResultado> sincronizar() {
+    public ResponseEntity<SincronizacaoResultado> sincronizar() {
         return ResponseEntity.ok(service.sincronizar());
     }
 }

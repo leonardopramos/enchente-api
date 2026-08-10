@@ -1,4 +1,4 @@
-package br.com.api_do_tempo.enchente.sincronizacao;
+package br.com.api_do_tempo.enchente.dto.sincronizacao;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

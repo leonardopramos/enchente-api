@@ -1,6 +1,8 @@
-package br.com.api_do_tempo.enchente.sincronizacao;
+package br.com.api_do_tempo.enchente.service.sincronizacao;
 
-import br.com.api_do_tempo.enchente.estacao.EstacaoMeteorologica;
+import br.com.api_do_tempo.enchente.client.sincronizacao.SincronizacaoClient;
+import br.com.api_do_tempo.enchente.dto.sincronizacao.GraphQlResponse;
+import br.com.api_do_tempo.enchente.dto.sincronizacao.SincronizacaoResultado;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -46,6 +48,4 @@ public class SincronizacaoService {
             throw new IllegalStateException("Não foi possível serializar a resposta da API", exception);
         }
     }
-
-    public record SincronizacaoResultado(int estacoesSincronizadas, java.time.OffsetDateTime sincronizadoEm) {}
 }

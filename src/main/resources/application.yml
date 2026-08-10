@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/enchente}
+    username: ${DB_USERNAME:enchente}
+    password: ${DB_PASSWORD:enchente}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    open-in-view: false
+
+  flyway:
+    enabled: true
+
+app:
+  synchronization:
+    url: ${HYDROGRAPHIC_API_URL:https://redehidrometeorologica.defesacivil.rs.gov.br/graphql}
+    cron: ${SYNCHRONIZATION_CRON:0 0 3 * * *}
+    zone: ${SYNCHRONIZATION_ZONE:America/Sao_Paulo}

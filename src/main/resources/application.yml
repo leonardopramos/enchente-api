@@ -16,3 +16,9 @@ app:
     url: ${HYDROGRAPHIC_API_URL:https://redehidrometeorologica.defesacivil.rs.gov.br/graphql}
     cron: ${SYNCHRONIZATION_CRON:0 0 3 * * *}
     zone: ${SYNCHRONIZATION_ZONE:America/Sao_Paulo}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

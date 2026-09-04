@@ -3,6 +3,8 @@ package br.com.api_do_tempo.enchente.client.sincronizacao;
 import br.com.api_do_tempo.enchente.dto.sincronizacao.GraphQlRequest;
 import br.com.api_do_tempo.enchente.dto.sincronizacao.GraphQlResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,8 @@ import org.springframework.web.client.RestClient;
 
 @Component
 public class SincronizacaoClient {
+
+    private static final Logger log = LoggerFactory.getLogger(SincronizacaoClient.class);
 
     private static final String QUERY = "query {\n"
             + "  tags_data(clients: [\"casa-militar-defesa-civil-rs\"]) {\n"
@@ -30,6 +34,7 @@ public class SincronizacaoClient {
     }
 
     public GraphQlResponse buscarEstacoes() {
+        log.debug("Enviando requisição GraphQL para buscar catálogo de estações");
         GraphQlResponse response = restClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new GraphQlRequest(QUERY))

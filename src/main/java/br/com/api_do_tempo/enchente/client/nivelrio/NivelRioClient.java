@@ -2,6 +2,8 @@ package br.com.api_do_tempo.enchente.client.nivelrio;
 
 import br.com.api_do_tempo.enchente.dto.nivelrio.NivelRioGraphQlResponse;
 import br.com.api_do_tempo.enchente.dto.sincronizacao.GraphQlRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -9,6 +11,8 @@ import org.springframework.web.client.RestClient;
 
 @Component
 public class NivelRioClient {
+
+    private static final Logger log = LoggerFactory.getLogger(NivelRioClient.class);
 
     private static final String QUERY = "query {\n"
             + "  tags_data(station: [\"%s\"], clients: [\"casa-militar-defesa-civil-rs\"]) {\n"
@@ -36,6 +40,7 @@ public class NivelRioClient {
     }
 
     public NivelRioGraphQlResponse buscarNivel(String codigoEstacao) {
+        log.debug("Enviando requisição GraphQL para consultar dados da estação: {}", codigoEstacao);
         String query = QUERY.formatted(codigoEstacao.replace("\"", "\\\""));
         NivelRioGraphQlResponse response = restClient.post()
                 .contentType(MediaType.APPLICATION_JSON)

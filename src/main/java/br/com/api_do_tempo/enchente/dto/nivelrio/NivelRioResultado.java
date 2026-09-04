@@ -7,7 +7,7 @@ public record NivelRioResultado(
         String codigo,
         NivelRioGraphQlResponse.Name name,
         NivelRioGraphQlResponse.Position position,
-        NivelRioGraphQlResponse.Rio rio,
+        RioResultado rio,
         NivelRioGraphQlResponse.Chuva chuva,
         NivelRioGraphQlResponse.Temperatura temperatura,
         NivelRioGraphQlResponse.Umidade umidade,

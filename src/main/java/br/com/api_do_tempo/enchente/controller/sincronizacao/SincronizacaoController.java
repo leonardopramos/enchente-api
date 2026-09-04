@@ -3,6 +3,8 @@ package br.com.api_do_tempo.enchente.controller.sincronizacao;
 import br.com.api_do_tempo.enchente.dto.sincronizacao.SincronizacaoResultado;
 import br.com.api_do_tempo.enchente.service.sincronizacao.SincronizacaoService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/sincronizar")
 @Tag(name = "Sincronização", description = "Atualização das estações meteorológicas armazenadas localmente")
 public class SincronizacaoController {
+
+    private static final Logger log = LoggerFactory.getLogger(SincronizacaoController.class);
 
     private final SincronizacaoService service;
 
@@ -33,6 +37,9 @@ public class SincronizacaoController {
             @ApiResponse(responseCode = "500", description = "Erro ao consultar a API externa ou persistir os dados")
     })
     public ResponseEntity<SincronizacaoResultado> sincronizar() {
-        return ResponseEntity.ok(service.sincronizar());
+        log.info("Requisição recebida para sincronização manual de estações meteorológicas");
+        SincronizacaoResultado resultado = service.sincronizar();
+        log.info("Sincronização manual concluída com sucesso: {} estações sincronizadas", resultado.estacoesSincronizadas());
+        return ResponseEntity.ok(resultado);
     }
 }

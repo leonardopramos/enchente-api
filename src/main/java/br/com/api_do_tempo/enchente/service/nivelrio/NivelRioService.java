@@ -3,12 +3,17 @@ package br.com.api_do_tempo.enchente.service.nivelrio;
 import br.com.api_do_tempo.enchente.client.nivelrio.NivelRioClient;
 import br.com.api_do_tempo.enchente.dto.nivelrio.NivelRioGraphQlResponse;
 import br.com.api_do_tempo.enchente.dto.nivelrio.NivelRioResultado;
+import br.com.api_do_tempo.enchente.dto.nivelrio.RioResultado;
 import br.com.api_do_tempo.enchente.entity.estacao.EstacaoMeteorologica;
 import br.com.api_do_tempo.enchente.repository.estacao.EstacaoMeteorologicaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class NivelRioService {
+
+    private static final Logger log = LoggerFactory.getLogger(NivelRioService.class);
 
     private final EstacaoMeteorologicaRepository repository;
     private final NivelRioClient client;
@@ -18,12 +23,31 @@ public class NivelRioService {
         this.client = client;
     }
 
+    public NivelRioResultado buscar(String coordenadas) {
+        if (coordenadas == null || coordenadas.isBlank()) {
+            throw new IllegalArgumentException("Coordenadas não informadas");
+        }
+        String[] partes = coordenadas.split(",");
+        if (partes.length != 2) {
+            throw new IllegalArgumentException("Formato de coordenadas inválido. Utilize o formato: latitude,longitude");
+        }
+        try {
+            Double latitude = Double.parseDouble(partes[0].trim());
+            Double longitude = Double.parseDouble(partes[1].trim());
+            return buscar(latitude, longitude);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Latitude ou longitude inválida", e);
+        }
+    }
+
     public NivelRioResultado buscar(Double latitude, Double longitude) {
         validarCoordenadas(latitude, longitude);
         EstacaoMeteorologica estacao = repository.findAll().stream()
                 .filter(item -> item.getLatitude() != null && item.getLongitude() != null)
                 .min((a, b) -> Double.compare(distancia(latitude, longitude, a), distancia(latitude, longitude, b)))
                 .orElseThrow(() -> new EstacaoNaoEncontradaException("Nenhuma estação com coordenadas foi encontrada"));
+
+        log.info("Estação mais próxima identificada: '{}' (código={})", estacao.getNome(), estacao.getCodigo());
 
         NivelRioGraphQlResponse response = client.buscarNivel(estacao.getCodigo());
         NivelRioGraphQlResponse.TagData tag = response.data() == null
@@ -35,7 +59,7 @@ public class NivelRioService {
             throw new EstacaoNaoEncontradaException("Não há nível do rio disponível para a estação mais próxima");
         }
 
-        return new NivelRioResultado(tag.codigo(), tag.name(), tag.position(), tag.data().rio(),
+        return new NivelRioResultado(tag.codigo(), tag.name(), tag.position(), RioResultado.from(tag.data().rio()),
                 tag.data().chuva(), tag.data().temperatura(), tag.data().umidade(),
                 tag.data().senstermica(), tag.data().vento());
     }

@@ -4,6 +4,8 @@ import br.com.api_do_tempo.enchente.dto.sincronizacao.GraphQlResponse;
 import br.com.api_do_tempo.enchente.dto.sincronizacao.SincronizacaoResultado;
 import br.com.api_do_tempo.enchente.entity.estacao.EstacaoMeteorologica;
 import br.com.api_do_tempo.enchente.repository.estacao.EstacaoMeteorologicaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,8 @@ import java.util.Map;
 
 @Service
 public class SincronizacaoPersistenceService {
+
+    private static final Logger log = LoggerFactory.getLogger(SincronizacaoPersistenceService.class);
 
     private final EstacaoMeteorologicaRepository repository;
 
@@ -37,6 +41,7 @@ public class SincronizacaoPersistenceService {
                 .filter(estacao -> estacao.codigo() != null && !estacao.codigo().isBlank())
                 .map(estacao -> atualizarEntidade(estacao, existentes, dadosBrutos, agora))
                 .toList();
+        log.info("Persistindo {} estações meteorológicas no banco de dados", paraSalvar.size());
         repository.saveAll(paraSalvar);
         return new SincronizacaoResultado(paraSalvar.size(), agora);
     }
